@@ -1,101 +1,85 @@
-import Image from "next/image";
+"use client";
+import { Card, CardContent } from "../components/ui/card";
+import { CountdownCircleTimer } from "react-countdown-circle-timer";
+import { useMemo } from "react";
+
+function getNextBirthdayIST() {
+  const now = new Date();
+  const istOffset = 5.5 * 60 * 60 * 1000;
+  const nowIST = new Date(now.getTime() + istOffset);
+  let year = nowIST.getFullYear();
+  const birthday = new Date(Date.UTC(year, 4, 25, 0, 0, 0)); // May is 4 (0-indexed)
+  if (nowIST > birthday) year += 1;
+  return new Date(Date.UTC(year, 4, 25, 0, 0, 0));
+}
+
+function getSecondsToBirthday() {
+  const now = new Date();
+  const istOffset = 5.5 * 60 * 60 * 1000;
+  const nowIST = new Date(now.getTime() + istOffset);
+  const nextBirthday = getNextBirthdayIST();
+  return Math.max(0, Math.floor((nextBirthday.getTime() - nowIST.getTime()) / 1000));
+}
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const duration = useMemo(() => getSecondsToBirthday(), []);
+  // const nextBirthday = useMemo(() => getNextBirthdayIST(), []); // Removed as it's unused
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+  return (
+    <div className="flex items-center justify-center min-h-screen w-full bg-background">
+      <Card className="backdrop-blur-2xl bg-black/70 border-2 border-yellow-400/80 shadow-[0_8px_32px_0_rgba(255,215,0,0.25)] max-w-sm w-full mx-4 rounded-3xl relative overflow-visible">
+        <CardContent className="flex flex-col items-center py-10 px-4 relative">
+          <h1 className="text-3xl sm:text-4xl font-serif font-extrabold text-center bg-gradient-to-r from-yellow-300 via-yellow-500 to-yellow-200 bg-clip-text text-transparent drop-shadow-xl tracking-tight mb-8 mt-2">
+            Ducky&apos;s Birthday In
+          </h1>
+          <div className="relative flex items-center justify-center">
+            {/* Subtle gold glow behind the timer */}
+            <span className="absolute w-[250px] h-[250px] rounded-full bg-gradient-to-br from-yellow-400/5 via-yellow-600/10 to-black/50 blur-xl z-0" />
+            <CountdownCircleTimer
+              isPlaying
+              duration={duration}
+              colors="#FFD700"
+              strokeWidth={14}
+              trailColor="rgba(50,50,50,0.5)"
+              size={220}
+              rotation="clockwise"
+              onComplete={() => ({ shouldRepeat: true, delay: 1, newInitialRemainingTime: getSecondsToBirthday() })}
+            >
+              {({ remainingTime }) => <CountdownDisplay remainingTime={remainingTime} />}
+            </CountdownCircleTimer>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+function CountdownDisplay({ remainingTime }: { remainingTime: number }) {
+  const days = Math.floor(remainingTime / (60 * 60 * 24));
+  const hours = Math.floor((remainingTime % (60 * 60 * 24)) / (60 * 60));
+  const minutes = Math.floor((remainingTime % (60 * 60)) / 60);
+  const seconds = remainingTime % 60;
+  return (
+    <div className="flex flex-col items-center justify-center w-full h-full z-10">
+      <div className="grid grid-cols-2 gap-x-6 gap-y-3 text-center">
+        <TimeBox value={days} label="Days" />
+        <TimeBox value={hours} label="Hours" />
+        <TimeBox value={minutes} label="Minutes" />
+        <TimeBox value={seconds} label="Seconds" />
+      </div>
+    </div>
+  );
+}
+
+function TimeBox({ value, label }: { value: number; label: string }) {
+  return (
+    <div className="flex flex-col items-center min-w-[70px]">
+      <span className="text-3xl font-bold font-serif bg-gradient-to-br from-yellow-200 via-yellow-400 to-yellow-100 bg-clip-text text-transparent drop-shadow-sm">
+        {String(value).padStart(2, "0")}
+      </span>
+      <span className="uppercase text-[10px] tracking-wider mt-0.5 bg-gradient-to-r from-yellow-300 via-yellow-500 to-yellow-200 bg-clip-text text-transparent font-semibold">
+        {label}
+      </span>
     </div>
   );
 }
