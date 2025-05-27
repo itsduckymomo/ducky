@@ -1,6 +1,8 @@
 import { NextResponse, NextRequest } from 'next/server';
 // import fs from 'fs/promises'; // Removed unused import
 
+export const runtime = 'edge'; // Added Edge Runtime config
+
 interface PastMessage {
   id: string;
   yearWritten: number;
