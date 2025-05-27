@@ -39,3 +39,23 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Local environment variables
+.env*.local
+
+# IDE / Editor specific files
+.vscode/
+*.code-workspace
+.idea/
+
+# OS specific files
+.DS_Store
+*.swp
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Test outputs
+coverage/
